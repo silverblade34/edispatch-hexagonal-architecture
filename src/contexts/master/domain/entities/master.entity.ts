@@ -1,15 +1,15 @@
-export enum TaskStatus {
+export enum MasterStatus {
     PENDING = 'PENDING',
     IN_PROGRESS = 'IN_PROGRESS',
     COMPLETED = 'COMPLETED'
   }
   
-  export class Task {
+  export class Master {
     constructor(
       public id: string,
       public title: string,
       public description: string,
-      public status: TaskStatus,
+      public status: MasterStatus,
       public userId: string,
       public createdAt: Date,
       public updatedAt: Date

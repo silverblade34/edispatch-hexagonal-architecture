@@ -1,5 +1,6 @@
 export class CreateUserDto {
-    name: string;
-    email: string;
-    password: string;
-  }
+  id: string
+  username: string
+  password: string
+  role: 'SUPER_MASTER' | 'MASTER' | 'COMPANY'
+}

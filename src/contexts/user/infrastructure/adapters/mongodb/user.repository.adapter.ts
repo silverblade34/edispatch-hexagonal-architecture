@@ -3,19 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserRepositoryPort } from '../../../domain/ports/user.repository.port';
 import { User } from '../../../domain/entities/user.entity';
-import { Email } from 'src/shared/domain/value-objects/email-value-object';
 
 @Injectable()
 export class UserRepositoryAdapter implements UserRepositoryPort {
   constructor(
     @InjectModel('User') private userModel: Model<User>
-  ) {}
+  ) { }
 
   async create(user: User): Promise<User> {
-    const createdUser = new this.userModel({
-      ...user,
-      email: user.email.toString()
-    });
+    const createdUser = new this.userModel(user);
     return await createdUser.save();
   }
 
@@ -25,8 +21,8 @@ export class UserRepositoryAdapter implements UserRepositoryPort {
     return this.mapToEntity(user);
   }
 
-  async findByEmail(email: string): Promise<User> {
-    const user = await this.userModel.findOne({ email }).exec();
+  async findByUsername(username: string): Promise<User> {
+    const user = await this.userModel.findOne({ username }).exec();
     if (!user) return null;
     return this.mapToEntity(user);
   }

@@ -4,7 +4,6 @@ import { UserRepositoryPort } from '../../domain/ports/user.repository.port';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { User } from '../../domain/entities/user.entity';
-import { Email } from 'src/shared/domain/value-objects/email-value-object';
 
 @Injectable()
 export class UserService {
@@ -14,18 +13,18 @@ export class UserService {
     ) { }
 
     async createUser(createUserDto: CreateUserDto): Promise<User> {
-        const existingUser = await this.userRepository.findByEmail(createUserDto.email);
+        const existingUser = await this.userRepository.findByUsername(createUserDto.username);
         if (existingUser) {
-            throw new ConflictException('Email already exists');
+            throw new ConflictException('El usuario ya se encuentra registrado');
         }
 
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
         const user = new User(
             undefined,
-            createUserDto.name,
-            createUserDto.email,
+            createUserDto.username,
             hashedPassword,
+            createUserDto.role,
             new Date(),
             new Date()
         );
@@ -36,15 +35,14 @@ export class UserService {
     async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
         const existingUser = await this.userRepository.findById(id);
         if (!existingUser) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException('El usuario no se encuentra registrado');
         }
 
-        if (updateUserDto.email) {
-            const emailInUse = await this.userRepository.findByEmail(updateUserDto.email);
-            if (emailInUse && emailInUse.id !== id) {
-                throw new ConflictException('Email already in use');
+        if (updateUserDto.username) {
+            const usernameInUse = await this.userRepository.findByUsername(updateUserDto.username);
+            if (usernameInUse && usernameInUse.id !== id) {
+                throw new ConflictException('El usuario ya se encuentra en uso');
             }
-            updateUserDto.email = new Email(updateUserDto.email).toString();
         }
 
         return await this.userRepository.update(id, updateUserDto);
@@ -53,7 +51,7 @@ export class UserService {
     async getUserById(id: string): Promise<User> {
         const user = await this.userRepository.findById(id);
         if (!user) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException('El usuario no se encuentra registrado');
         }
         return user;
     }
@@ -61,7 +59,7 @@ export class UserService {
     async deleteUser(id: string): Promise<void> {
         const user = await this.userRepository.findById(id);
         if (!user) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException('El usuario no se encuentra registrado');
         }
         await this.userRepository.delete(id);
     }
