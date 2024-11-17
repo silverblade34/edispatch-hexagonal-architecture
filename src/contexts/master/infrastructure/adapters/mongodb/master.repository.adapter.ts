@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MasterRepositoryPort } from '../../../domain/ports/master.repository.port';
-import { Master, MasterStatus } from '../../../domain/entities/master.entity';
+import { Master } from '../../../domain/entities/master.entity';
 
 @Injectable()
 export class MasterRepositoryAdapter implements MasterRepositoryPort {

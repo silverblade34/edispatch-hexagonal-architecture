@@ -1,6 +1,11 @@
+import { IsIn, IsNotEmpty } from "class-validator"
+import { Role } from "src/shared/domain/enums/role.enum"
+
 export class CreateUserDto {
-  id: string
+  @IsNotEmpty()
   username: string
+  @IsNotEmpty()
   password: string
-  role: 'SUPER_MASTER' | 'MASTER' | 'COMPANY'
+  @IsIn(['SUPERMASTER', 'MASTER', 'COMPANY'])
+  role: Role
 }

@@ -1,0 +1,5 @@
+export enum Role {
+  SUPERMASTER = 'SUPERMASTER',
+  MASTER = 'MASTER',
+  COMPANY = 'COMPANY'
+}

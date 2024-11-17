@@ -1,6 +1,4 @@
 export class CreateMasterDto {
-    title: string;
-    description: string;
-    userId: string;
-  }
-  
+  name: string;
+  identifier: string;
+}
