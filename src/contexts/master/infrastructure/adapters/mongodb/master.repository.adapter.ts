@@ -23,10 +23,10 @@ export class MasterRepositoryAdapter implements MasterRepositoryPort {
     return await this.masterModel.find({ userId }).exec();
   }
 
-  async update(id: string, taskData: Partial<Master>): Promise<Master> {
+  async update(id: string, masterData: Partial<Master>): Promise<Master> {
     return await this.masterModel.findByIdAndUpdate(
       id,
-      { ...taskData, updatedAt: new Date() },
+      { ...masterData, updatedAt: new Date() },
       { new: true }
     ).exec();
   }

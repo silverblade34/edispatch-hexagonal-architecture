@@ -11,7 +11,7 @@ export class GoogleDriveAdapter {
     const formData = new FormData();
     formData.append('file', image.buffer, image.originalname);
     const response = await lastValueFrom(
-      this.httpService.post('http://198.211.99.223:9000/file/upload', formData, {
+      this.httpService.post(process.env.LINK_API_DRIVE, formData, {
         headers: formData.getHeaders(),
       }),
     );

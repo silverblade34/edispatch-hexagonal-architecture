@@ -14,16 +14,9 @@ export class MasterController {
     return await this.masterService.createMaster(createMasterDto, image);
   }
 
-  @Put(':id/status')
-  async updateTaskStatus(
-    @Param('id') id: string,
-    @Body() updateMasterDto: UpdateMasterDto
-  ) {
-    return await this.masterService.updateTaskStatus(id, updateMasterDto);
-  }
-
-  @Get('user/:userId')
-  async getTasksByUserId(@Param('userId') userId: string) {
-    return await this.masterService.getTasksByUserId(userId);
+  @Put()
+  @UseInterceptors(FilesInterceptor('image'))
+  async updateMaster(@UploadedFiles() image: any, @Body() updateMasterDto: UpdateMasterDto) {
+    return await this.masterService.updateMaster(updateMasterDto, image);
   }
 }

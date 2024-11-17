@@ -25,15 +25,14 @@ export class MasterService {
     if (!allowedMimeTypes.includes(image.mimetype)) {
       throw new BadRequestException('El archivo debe ser una imagen (jpeg, png, jpg)');
     }
-
-    const publicUrl = await this.fileUploadService.uploadLogo(image);
     const createUserDto: CreateUserDto = {
       username: createMasterDto.username,
       password: createMasterDto.password,
       role: Role.MASTER,
     };
     const user = await this.userService.createUser(createUserDto);
-    const task = new Master(
+    const publicUrl = await this.fileUploadService.uploadLogo(image);
+    const master = new Master(
       undefined,
       createMasterDto.name,
       createMasterDto.identifier,
@@ -42,16 +41,36 @@ export class MasterService {
       new Date(),
       new Date()
     );
-    return await this.masterRepository.create(task);
+    return await this.masterRepository.create(master);
   }
 
-  async updateTaskStatus(id: string, updateMasterDto: UpdateMasterDto): Promise<Master> {
-    return await this.masterRepository.update(id, {
-      name: updateMasterDto.name
-    });
-  }
-
-  async getTasksByUserId(userId: string): Promise<Master[]> {
-    return await this.masterRepository.findByUserId(userId);
+  async updateMaster(updateMasterDto: UpdateMasterDto, images: any): Promise<Master> {
+    console.log(images)
+    const image = images[0]
+    if (!image) {
+      throw new NotFoundException('Debe cargar una imagen de logo');
+    }
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedMimeTypes.includes(image.mimetype)) {
+      throw new BadRequestException('El archivo debe ser una imagen (jpeg, png, jpg)');
+    }
+    // const createUserDto: CreateUserDto = {
+    //   username: updateMasterDto.username,
+    //   password: updateMasterDto.password,
+    //   role: Role.MASTER,
+    // };
+    // const user = await this.userService.createUser(createUserDto);
+    // const publicUrl = await this.fileUploadService.uploadLogo(image);
+    // const master = new Master(
+    //   undefined,ß
+    //   updateMasterDto.name,
+    //   updateMasterDto.identifier,
+    //   publicUrl,
+    //   user.id,
+    //   new Date(),
+    //   new Date()
+    // );
+    // return await this.masterRepository.create(master);
+    return null;
   }
 }
