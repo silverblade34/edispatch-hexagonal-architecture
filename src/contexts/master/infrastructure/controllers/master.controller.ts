@@ -1,14 +1,19 @@
-import { Controller, Post, Put, Get, Body, Param, UseInterceptors, UploadedFiles, Delete } from '@nestjs/common';
+import { Controller, Post, Put, Get, Body, Param, UseInterceptors, UploadedFiles, Delete, UseGuards } from '@nestjs/common';
 import { MasterService } from '../../application/services/master.service';
 import { CreateMasterDto } from '../../application/dtos/create-master.dto';
 import { UpdateMasterDto } from '../../application/dtos/update-master.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { Roles } from 'src/contexts/auth/infrastructure/decorators/roles.decorator';
+import { Role } from 'src/shared/domain/enums/role.enum';
+import { RolesGuard } from 'src/contexts/auth/infrastructure/guards/roles.guard';
 
 @Controller('masters')
 export class MasterController {
   constructor(private readonly masterService: MasterService) { }
 
   @Get()
+  @Roles(Role.SUPERMASTER)
+  @UseGuards(RolesGuard)
   async findAllMaster() {
     return await this.masterService.findAllMaster();
   }
