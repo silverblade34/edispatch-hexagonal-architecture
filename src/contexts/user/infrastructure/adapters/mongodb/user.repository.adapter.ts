@@ -43,9 +43,9 @@ export class UserRepositoryAdapter implements UserRepositoryPort {
   private mapToEntity(document: any): User {
     return new User(
       document._id.toString(),
-      document.name,
-      document.email,
+      document.username,
       document.password,
+      document.role,
       document.createdAt,
       document.updatedAt
     );

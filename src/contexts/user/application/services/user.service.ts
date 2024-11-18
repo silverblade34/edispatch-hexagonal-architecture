@@ -40,12 +40,15 @@ export class UserService {
 
         if (updateUserDto.username) {
             const usernameInUse = await this.userRepository.findByUsername(updateUserDto.username);
-            if (usernameInUse && usernameInUse.id !== id) {
+            if (usernameInUse && usernameInUse.id != id) {
                 throw new ConflictException('El usuario ya se encuentra en uso');
             }
         }
-
-        return await this.userRepository.update(id, updateUserDto);
+        let password = existingUser.password;
+        if (updateUserDto.password != existingUser.password) {
+            password = await bcrypt.hash(updateUserDto.password, 10);
+        }
+        return await this.userRepository.update(id, { ...updateUserDto, password });
     }
 
     async getUserById(id: string): Promise<User> {

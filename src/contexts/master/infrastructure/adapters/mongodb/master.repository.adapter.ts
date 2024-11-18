@@ -8,7 +8,7 @@ import { Master } from '../../../domain/entities/master.entity';
 export class MasterRepositoryAdapter implements MasterRepositoryPort {
   constructor(
     @InjectModel('Master') private masterModel: Model<Master>
-  ) {}
+  ) { }
 
   async create(task: Master): Promise<Master> {
     const createdTask = new this.masterModel(task);
@@ -19,8 +19,8 @@ export class MasterRepositoryAdapter implements MasterRepositoryPort {
     return await this.masterModel.findById(id).exec();
   }
 
-  async findByUserId(userId: string): Promise<Master[]> {
-    return await this.masterModel.find({ userId }).exec();
+  async findAll(): Promise<Master[]> {
+    return await this.masterModel.find().exec();
   }
 
   async update(id: string, masterData: Partial<Master>): Promise<Master> {
