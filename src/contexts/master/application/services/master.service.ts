@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MasterRepositoryPort } from '../../domain/ports/master.repository.port';
 import { CreateMasterDto } from '../dtos/create-master.dto';
 import { UpdateMasterDto } from '../dtos/update-master.dto';
@@ -13,10 +18,11 @@ import { ResponseMasterDto } from '../dtos/response-master.dto';
 @Injectable()
 export class MasterService {
   constructor(
-    @Inject('MasterRepositoryPort') private readonly masterRepository: MasterRepositoryPort,
+    @Inject('MasterRepositoryPort')
+    private readonly masterRepository: MasterRepositoryPort,
     private readonly fileUploadService: FileUploadService,
-    private readonly userService: UserService
-  ) { }
+    private readonly userService: UserService,
+  ) {}
 
   private validateImage(image: any): void {
     const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -24,7 +30,9 @@ export class MasterService {
       throw new NotFoundException('Debe cargar una imagen de logo');
     }
     if (!allowedMimeTypes.includes(image.mimetype)) {
-      throw new BadRequestException('El archivo debe ser una imagen (jpeg, png, jpg)');
+      throw new BadRequestException(
+        'El archivo debe ser una imagen (jpeg, png, jpg)',
+      );
     }
   }
 
@@ -47,8 +55,11 @@ export class MasterService {
     };
   }
 
-  async createMaster(createMasterDto: CreateMasterDto, images: any): Promise<Master> {
-    const image = images[0]
+  async createMaster(
+    createMasterDto: CreateMasterDto,
+    images: any,
+  ): Promise<ResponseMasterDto> {
+    const image = images[0];
     this.validateImage(image);
 
     const createUserDto: CreateUserDto = {
@@ -65,26 +76,36 @@ export class MasterService {
       publicUrl,
       user.id,
       new Date(),
-      new Date()
+      new Date(),
     );
-    return await this.masterRepository.create(master);
+    const masterCreated = await this.masterRepository.create(master);
+    const masterWithUser = this.mapMasterWithUser(masterCreated);
+    return masterWithUser;
   }
 
   async findAllMaster(): Promise<ResponseMasterDto[]> {
     const masters = await this.masterRepository.findAll();
-    const mastersWithUser = await Promise.all(masters.map(master => this.mapMasterWithUser(master)));
+    const mastersWithUser = await Promise.all(
+      masters.map((master) => this.mapMasterWithUser(master)),
+    );
 
     return mastersWithUser;
   }
 
-  async updateMaster(masterId: string, updateMasterDto: UpdateMasterDto, images: any): Promise<ResponseMasterDto> {
+  async updateMaster(
+    masterId: string,
+    updateMasterDto: UpdateMasterDto,
+    images: any,
+  ): Promise<ResponseMasterDto> {
     const master = await this.masterRepository.findById(masterId);
     if (!master) {
-      throw new NotFoundException(`El master con id:${masterId} no se encuentra registrado`);
+      throw new NotFoundException(
+        `El master con id:${masterId} no se encuentra registrado`,
+      );
     }
     let linkImage = master.logo;
     if (images.length > 0) {
-      const image = images[0]
+      const image = images[0];
       this.validateImage(image);
       linkImage = await this.fileUploadService.uploadLogo(image);
     }
@@ -93,7 +114,10 @@ export class MasterService {
       username: updateMasterDto.username,
       password: updateMasterDto.password,
     };
-    const userUpdated = await this.userService.updateUser(master.userId, updateUserDto);
+    const userUpdated = await this.userService.updateUser(
+      master.userId,
+      updateUserDto,
+    );
     const masterUpdate = new Master(
       undefined,
       updateMasterDto.name,
@@ -101,10 +125,13 @@ export class MasterService {
       linkImage,
       userUpdated.id,
       master.createdAt,
-      master.updatedAt
+      master.updatedAt,
     );
-    const masterUpdated = await this.masterRepository.update(masterId, masterUpdate);
-    const masterWithUser = this.mapMasterWithUser(masterUpdated)
+    const masterUpdated = await this.masterRepository.update(
+      masterId,
+      masterUpdate,
+    );
+    const masterWithUser = this.mapMasterWithUser(masterUpdated);
     return masterWithUser;
   }
 

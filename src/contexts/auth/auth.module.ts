@@ -7,15 +7,21 @@ import { JwtAdapter } from './infrastructure/adapters/jwt.adapter';
 import { AuthController } from './infrastructure/controllers/auth.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../user/infrastructure/adapters/mongodb/schemas/user.schema';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { JwtGuard } from './infrastructure/guards/jwt.guard';
+import { RolesGuard } from './infrastructure/guards/roles.guard';
 
 @Module({
   imports: [
     ConfigModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     JwtModule.registerAsync({
-      useFactory: async () => ({
-        secret: process.env.JWT_SECRET,
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '10h' },
       }),
     }),
@@ -23,6 +29,7 @@ import { ConfigModule } from '@nestjs/config';
   providers: [
     AuthService,
     JwtService,
+    JwtStrategy,
     {
       provide: 'AuthRepositoryPort',
       useClass: AuthRepositoryAdapter,
@@ -31,8 +38,10 @@ import { ConfigModule } from '@nestjs/config';
       provide: 'JwtServicePort',
       useClass: JwtAdapter,
     },
+    JwtGuard,
+    RolesGuard,
   ],
   controllers: [AuthController],
   exports: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}
