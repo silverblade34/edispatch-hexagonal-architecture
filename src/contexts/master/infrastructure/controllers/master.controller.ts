@@ -9,6 +9,7 @@ import {
   UploadedFiles,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { MasterService } from '../../application/services/master.service';
 import { CreateMasterDto } from '../../application/dtos/create-master.dto';
@@ -26,7 +27,8 @@ export class MasterController {
   constructor(private readonly masterService: MasterService) {}
 
   @Get()
-  async findAllMaster() {
+  async findAllMaster(@Req() request: any) {
+    const { roleId } = request.user;
     return await this.masterService.findAllMaster();
   }
 

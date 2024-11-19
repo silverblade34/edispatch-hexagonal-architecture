@@ -10,9 +10,9 @@ export class MasterRepositoryAdapter implements MasterRepositoryPort {
     @InjectModel('Master') private masterModel: Model<Master>
   ) { }
 
-  async create(task: Master): Promise<Master> {
-    const createdTask = new this.masterModel(task);
-    return await createdTask.save();
+  async create(master: Master): Promise<Master> {
+    const createdMaster= new this.masterModel(master);
+    return await createdMaster.save();
   }
 
   async findById(id: string): Promise<Master> {
