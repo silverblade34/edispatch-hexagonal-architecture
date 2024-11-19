@@ -23,17 +23,18 @@ import { UpdateCompanyDto } from '../../application/dtos/update-company.dto';
 
 @Controller('companies')
 @UseGuards(JwtGuard, RolesGuard)
-@Roles(Role.MASTER)
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Get()
+  @Roles(Role.MASTER)
   async findAllCompany(@Req() request: any) {
     const { roleId } = request.user;
     return await this.companyService.findAllCompany(roleId);
   }
 
   @Post()
+  @Roles(Role.MASTER)
   @UseInterceptors(FilesInterceptor('image'))
   async createCompany(
     @Req() request: any,
@@ -49,6 +50,7 @@ export class CompanyController {
   }
 
   @Put(':id')
+  @Roles(Role.MASTER)
   @UseInterceptors(FilesInterceptor('image'))
   async updateCompany(
     @Param('id') id: string,
@@ -59,6 +61,7 @@ export class CompanyController {
   }
 
   @Delete(':id')
+  @Roles(Role.MASTER)
   async deleteCompany(@Param('id') id: string) {
     return await this.companyService.deleteCompany(id);
   }
