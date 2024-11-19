@@ -6,12 +6,10 @@ import { Master } from '../../../domain/entities/master.entity';
 
 @Injectable()
 export class MasterRepositoryAdapter implements MasterRepositoryPort {
-  constructor(
-    @InjectModel('Master') private masterModel: Model<Master>
-  ) { }
+  constructor(@InjectModel('Master') private masterModel: Model<Master>) {}
 
   async create(master: Master): Promise<Master> {
-    const createdMaster= new this.masterModel(master);
+    const createdMaster = new this.masterModel(master);
     return await createdMaster.save();
   }
 
@@ -19,16 +17,22 @@ export class MasterRepositoryAdapter implements MasterRepositoryPort {
     return await this.masterModel.findById(id).exec();
   }
 
+  async findByUserId(userId: string): Promise<Master> {
+    return await this.masterModel.findOne({ userId }).exec();
+  }
+
   async findAll(): Promise<Master[]> {
     return await this.masterModel.find().exec();
   }
 
   async update(id: string, masterData: Partial<Master>): Promise<Master> {
-    return await this.masterModel.findByIdAndUpdate(
-      id,
-      { ...masterData, updatedAt: new Date() },
-      { new: true }
-    ).exec();
+    return await this.masterModel
+      .findByIdAndUpdate(
+        id,
+        { ...masterData, updatedAt: new Date() },
+        { new: true },
+      )
+      .exec();
   }
 
   async delete(id: string): Promise<void> {

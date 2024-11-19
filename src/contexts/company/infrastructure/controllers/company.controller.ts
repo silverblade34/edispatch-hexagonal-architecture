@@ -1,15 +1,15 @@
 import {
-    Controller,
-    Post,
-    Put,
-    Get,
-    Body,
-    Param,
-    UseInterceptors,
-    UploadedFiles,
-    Delete,
-    UseGuards,
-    Req,
+  Controller,
+  Post,
+  Put,
+  Get,
+  Body,
+  Param,
+  UseInterceptors,
+  UploadedFiles,
+  Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -25,37 +25,41 @@ import { UpdateCompanyDto } from '../../application/dtos/update-company.dto';
 @UseGuards(JwtGuard, RolesGuard)
 @Roles(Role.MASTER)
 export class CompanyController {
-    constructor(private readonly companyService: CompanyService) { }
+  constructor(private readonly companyService: CompanyService) {}
 
-    @Get()
-    async findAllCompany(@Req() request: any) {
-        const { roleId } = request.user;
-        console.log("-------------------")
-        console.log(roleId)
-        return await this.companyService.findAllCompany();
-    }
+  @Get()
+  async findAllCompany(@Req() request: any) {
+    const { roleId } = request.user;
+    return await this.companyService.findAllCompany(roleId);
+  }
 
-    @Post()
-    @UseInterceptors(FilesInterceptor('image'))
-    async createCompany(
-        @UploadedFiles() image: any,
-        @Body() createCompanyDto: CreateCompanyDto,
-    ) {
-        return await this.companyService.createCompany(createCompanyDto, image);
-    }
+  @Post()
+  @UseInterceptors(FilesInterceptor('image'))
+  async createCompany(
+    @Req() request: any,
+    @UploadedFiles() image: any,
+    @Body() createCompanyDto: CreateCompanyDto,
+  ) {
+    const { roleId } = request.user;
+    return await this.companyService.createCompany(
+      createCompanyDto,
+      image,
+      roleId,
+    );
+  }
 
-    @Put(':id')
-    @UseInterceptors(FilesInterceptor('image'))
-    async updateCompany(
-        @Param('id') id: string,
-        @UploadedFiles() image: any,
-        @Body() updateCompanyDto: UpdateCompanyDto,
-    ) {
-        return await this.companyService.updateCompany(id, updateCompanyDto, image);
-    }
+  @Put(':id')
+  @UseInterceptors(FilesInterceptor('image'))
+  async updateCompany(
+    @Param('id') id: string,
+    @UploadedFiles() image: any,
+    @Body() updateCompanyDto: UpdateCompanyDto,
+  ) {
+    return await this.companyService.updateCompany(id, updateCompanyDto, image);
+  }
 
-    @Delete(':id')
-    async deleteCompany(@Param('id') id: string) {
-        return await this.companyService.deleteCompany(id);
-    }
+  @Delete(':id')
+  async deleteCompany(@Param('id') id: string) {
+    return await this.companyService.deleteCompany(id);
+  }
 }

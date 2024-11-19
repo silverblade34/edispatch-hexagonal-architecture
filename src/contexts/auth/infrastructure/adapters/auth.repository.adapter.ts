@@ -7,15 +7,16 @@ import { User } from 'src/contexts/user/domain/entities/user.entity';
 
 @Injectable()
 export class AuthRepositoryAdapter implements AuthRepositoryPort {
-  constructor(
-    @InjectModel('User') private userModel: Model<User>
-  ) { }
+  constructor(@InjectModel('User') private userModel: Model<User>) {}
 
   async findByUsername(username: string): Promise<User> {
-    return this.userModel.findOne({ username });
+    return this.userModel.findOne({ username }).exec();
   }
 
-  async validateCredentials(userPassword: string, password: string): Promise<boolean> {
+  async validateCredentials(
+    userPassword: string,
+    password: string,
+  ): Promise<boolean> {
     return bcrypt.compare(password, userPassword);
   }
 }

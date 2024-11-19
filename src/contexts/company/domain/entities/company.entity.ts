@@ -5,8 +5,8 @@ export class Company {
     public identifier: string,
     public logo: string,
     public userId: string,
-    public companyId: string,
+    public masterId: string,
     public createdAt: Date,
-    public updatedAt: Date
-  ) { }
+    public updatedAt: Date,
+  ) {}
 }

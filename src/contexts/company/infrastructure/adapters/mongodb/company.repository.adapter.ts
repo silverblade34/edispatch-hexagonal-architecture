@@ -6,9 +6,7 @@ import { CompanyRepositoryPort } from 'src/contexts/company/domain/ports/company
 
 @Injectable()
 export class CompanyRepositoryAdapter implements CompanyRepositoryPort {
-  constructor(
-    @InjectModel('Company') private companyModel: Model<Company>
-  ) { }
+  constructor(@InjectModel('Company') private companyModel: Model<Company>) {}
 
   async create(company: Company): Promise<Company> {
     const createdCompany = new this.companyModel(company);
@@ -19,16 +17,22 @@ export class CompanyRepositoryAdapter implements CompanyRepositoryPort {
     return await this.companyModel.findById(id).exec();
   }
 
-  async findAll(): Promise<Company[]> {
-    return await this.companyModel.find().exec();
+  async findByUserId(userId: string): Promise<Company> {
+    return await this.companyModel.findOne({ userId }).exec();
+  }
+
+  async findAllByMaster(masterId: string): Promise<Company[]> {
+    return await this.companyModel.find({ masterId }).exec();
   }
 
   async update(id: string, companyData: Partial<Company>): Promise<Company> {
-    return await this.companyModel.findByIdAndUpdate(
-      id,
-      { ...companyData, updatedAt: new Date() },
-      { new: true }
-    ).exec();
+    return await this.companyModel
+      .findByIdAndUpdate(
+        id,
+        { ...companyData, updatedAt: new Date() },
+        { new: true },
+      )
+      .exec();
   }
 
   async delete(id: string): Promise<void> {

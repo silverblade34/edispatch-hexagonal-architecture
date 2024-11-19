@@ -9,7 +9,6 @@ import {
   UploadedFiles,
   Delete,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { MasterService } from '../../application/services/master.service';
 import { CreateMasterDto } from '../../application/dtos/create-master.dto';
@@ -22,17 +21,17 @@ import { JwtGuard } from 'src/contexts/auth/infrastructure/guards/jwt.guard';
 
 @Controller('masters')
 @UseGuards(JwtGuard, RolesGuard)
-@Roles(Role.SUPERMASTER)
 export class MasterController {
   constructor(private readonly masterService: MasterService) {}
 
   @Get()
-  async findAllMaster(@Req() request: any) {
-    const { roleId } = request.user;
+  @Roles(Role.SUPERMASTER)
+  async findAllMaster() {
     return await this.masterService.findAllMaster();
   }
 
   @Post()
+  @Roles(Role.SUPERMASTER)
   @UseInterceptors(FilesInterceptor('image'))
   async createMaster(
     @UploadedFiles() image: any,
@@ -42,6 +41,7 @@ export class MasterController {
   }
 
   @Put(':id')
+  @Roles(Role.SUPERMASTER)
   @UseInterceptors(FilesInterceptor('image'))
   async updateMaster(
     @Param('id') id: string,
@@ -52,6 +52,7 @@ export class MasterController {
   }
 
   @Delete(':id')
+  @Roles(Role.SUPERMASTER)
   async deleteMaster(@Param('id') id: string) {
     return await this.masterService.deleteMaster(id);
   }
