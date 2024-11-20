@@ -5,6 +5,7 @@ import { MasterModule } from './contexts/master/master.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './contexts/auth/auth.module';
 import { CompanyModule } from './contexts/company/company.module';
+import { CustomerModule } from './contexts/customer/customer.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CompanyModule } from './contexts/company/company.module';
     UserModule,
     MasterModule,
     CompanyModule,
+    CustomerModule
   ],
 })
 export class AppModule {}
