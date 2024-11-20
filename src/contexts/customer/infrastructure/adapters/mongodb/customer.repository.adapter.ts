@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { Customer } from 'src/contexts/customer/domain/entities/customer.entity';
 import { CustomerRepositoryPort } from 'src/contexts/customer/domain/ports/customer.repository.port';
 
-
 @Injectable()
 export class CustomerRepositoryAdapter implements CustomerRepositoryPort {
   constructor(@InjectModel('Customer') private customerModel: Model<Customer>) { }

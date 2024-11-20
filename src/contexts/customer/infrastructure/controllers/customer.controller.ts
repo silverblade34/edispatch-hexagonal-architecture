@@ -19,7 +19,7 @@ export class CustomerController {
     return await this.customerService.createCustomer(createCustomerDto, roleId);
   }
 
-  @Get('')
+  @Get()
   @Roles(Role.COMPANY)
   async findAllCustomer(@Req() request: any) {
     const { roleId } = request.user;

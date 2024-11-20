@@ -12,7 +12,7 @@ export class CustomerService {
     ) { }
 
     async createCustomer(createCustomerDto: CreateCustomerDto, roleId: string): Promise<Customer> {
-        const user = new Customer(
+        const customer = new Customer(
             undefined,
             createCustomerDto.name,
             createCustomerDto.code,
@@ -27,7 +27,7 @@ export class CustomerService {
             new Date()
         );
 
-        return await this.customerRepository.create(user);
+        return await this.customerRepository.create(customer);
     }
 
     async findAllCustomer(roleId: string): Promise<Customer[]> {
