@@ -21,9 +21,9 @@ export class DriverController {
 
     @Get()
     @Roles(Role.COMPANY)
-    async findAllCustomer(@Req() request: any) {
+    async findAllDriver(@Req() request: any) {
         const { roleId } = request.user;
-        return await this.driverService.findAllDrivers(roleId);
+        return await this.driverService.findAllDriver(roleId);
     }
 
     @Put(':id')

@@ -7,6 +7,7 @@ import { AuthModule } from './contexts/auth/auth.module';
 import { CompanyModule } from './contexts/company/company.module';
 import { CustomerModule } from './contexts/customer/customer.module';
 import { DriverModule } from './contexts/driver/driver.module';
+import { CisternModule } from './contexts/cistern/cistern.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { DriverModule } from './contexts/driver/driver.module';
     MasterModule,
     CompanyModule,
     CustomerModule,
-    DriverModule
+    DriverModule,
+    CisternModule
   ],
 })
 export class AppModule {}

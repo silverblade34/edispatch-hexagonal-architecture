@@ -27,7 +27,7 @@ export class DriverService {
         return await this.driverRepository.create(driver);
     }
 
-    async findAllDrivers(roleId: string): Promise<Driver[]> {
+    async findAllDriver(roleId: string): Promise<Driver[]> {
         const drivers = await this.driverRepository.findAll(roleId);
         return drivers;
     }
