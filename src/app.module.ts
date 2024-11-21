@@ -8,6 +8,8 @@ import { CompanyModule } from './contexts/company/company.module';
 import { CustomerModule } from './contexts/customer/customer.module';
 import { DriverModule } from './contexts/driver/driver.module';
 import { CisternModule } from './contexts/cistern/cistern.module';
+import { BillingModule } from './contexts/billing/billing.module';
+import { LoadModule } from './contexts/load/load.module';
 
 @Module({
   imports: [
@@ -22,7 +24,9 @@ import { CisternModule } from './contexts/cistern/cistern.module';
     CompanyModule,
     CustomerModule,
     DriverModule,
-    CisternModule
+    CisternModule,
+    BillingModule,
+    LoadModule
   ],
 })
 export class AppModule {}

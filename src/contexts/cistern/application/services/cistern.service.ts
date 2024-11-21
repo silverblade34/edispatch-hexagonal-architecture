@@ -26,8 +26,8 @@ export class CisternService {
     }
 
     async findAllCistern(roleId: string): Promise<Cistern[]> {
-        const drivers = await this.cisternRepository.findAll(roleId);
-        return drivers;
+        const cisterns = await this.cisternRepository.findAll(roleId);
+        return cisterns;
     }
 
     async updateCistern(id: string, updateCisternDto: UpdateCisternDto): Promise<Cistern> {

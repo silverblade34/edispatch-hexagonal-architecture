@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { DriverSchema } from "./infrastructure/adapters/schemas/driver.schema";
+import { DriverSchema } from "./infrastructure/adapters/mongodb/schemas/driver.schema";
 import { DriverController } from "./infrastructure/controllers/driver.controller";
 import { DriverService } from "./application/services/driver.service";
-import { DriverRepositoryAdapter } from "./infrastructure/adapters/driver.repository.adapter";
+import { DriverRepositoryAdapter } from "./infrastructure/adapters/mongodb/driver.repository.adapter";
 
 @Module({
     imports: [

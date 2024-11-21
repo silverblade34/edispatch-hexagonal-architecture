@@ -28,7 +28,7 @@ export class CisternController {
 
     @Put(':id')
     @Roles(Role.COMPANY)
-    async updateDriver(
+    async updateCistern(
         @Param('id') id: string,
         @Body() updateCisternDto: UpdateCisternDto
     ) {
@@ -37,13 +37,13 @@ export class CisternController {
 
     @Get(':id')
     @Roles(Role.COMPANY)
-    async getDriver(@Param('id') id: string) {
+    async getCistern(@Param('id') id: string) {
         return await this.cisternService.getCisternById(id);
     }
 
     @Delete(':id')
     @Roles(Role.COMPANY)
-    async deleteDriver(@Param('id') id: string) {
+    async deleteCistern(@Param('id') id: string) {
         return await this.cisternService.deleteCistern(id);
     }
 }

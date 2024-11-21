@@ -42,11 +42,11 @@ export class DriverService {
     }
 
     async getDriverById(id: string): Promise<Driver> {
-        const customer = await this.driverRepository.findById(id);
-        if (!customer) {
+        const driver = await this.driverRepository.findById(id);
+        if (!driver) {
             throw new NotFoundException('El conductor no se encuentra registrado');
         }
-        return customer;
+        return driver;
     }
 
     async deleteDriver(id: string): Promise<void> {

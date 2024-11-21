@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { DriverRepositoryPort } from "../../domain/ports/driver.repository.port";
+import { DriverRepositoryPort } from "../../../domain/ports/driver.repository.port";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Driver } from "../../domain/entities/driver.entity";
+import { Driver } from "../../../domain/entities/driver.entity";
 
 @Injectable()
 export class DriverRepositoryAdapter implements DriverRepositoryPort {

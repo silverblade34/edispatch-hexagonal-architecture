@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { CisternRepositoryPort } from "../../domain/ports/cistern.repository.port";
+import { CisternRepositoryPort } from "../../../domain/ports/cistern.repository.port";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Cistern } from "../../domain/entities/cistern.entity";
+import { Cistern } from "../../../domain/entities/cistern.entity";
 
 @Injectable()
 export class CisternRepositoryAdapter implements CisternRepositoryPort {
@@ -15,10 +15,6 @@ export class CisternRepositoryAdapter implements CisternRepositoryPort {
 
   async findById(id: string): Promise<Cistern> {
     return await this.cisternModel.findById(id).exec();
-  }
-
-  async findByUserId(userId: string): Promise<Cistern> {
-    return await this.cisternModel.findOne({ userId }).exec();
   }
 
   async findAll(): Promise<Cistern[]> {
